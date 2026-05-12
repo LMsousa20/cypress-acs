@@ -4,9 +4,7 @@ screenshots
 cypress/e2e/ESTUDANDO
 cypress/e2e/TESTE_ESPECIFICO
 cypress/e2e/CADASTRO
-.env.example
 .env
+
 cypress/videos
 cypress/reports
-run_suite.bat
-init.bat
