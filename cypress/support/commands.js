@@ -25,35 +25,35 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('login', (
-  tenantId = Cypress.env('tenantId') || 'posto-mirla-01', 
-  empresa = Cypress.env('empresa') || 'Empresa Emcomoda', 
-  username = Cypress.env('userLogin') || 'admin', 
-  password = Cypress.env('userPassword') || 'admin'
+  tenantId = Cypress.env('tenantId'),
+  empresa = Cypress.env('empresa'),
+  username = Cypress.env('userLogin'),
+  password = Cypress.env('userPassword')
 ) => {
 
-  cy.visit('/login/'+tenantId);
-  
+  cy.visit('/login/' + tenantId);
+
   // Preencher credenciais
   cy.get('[formcontrolname="username"]').clear().type(username);
   cy.get('#password-input').clear().type(password).wait(500);
-  
-//   //Abrir o select e escolher a empresa
- cy.get('mat-select[formcontrolname="empresa"]').click();
- cy.get('#cdk-overlay-0', { timeout: 10000 }).should('be.visible');
-cy.get('#cdk-overlay-0 mat-option')
-  .contains(empresa) // ← SUBSTITUA pelo nome da empresa que você quer
-  .click();
-  
+
+  //   //Abrir o select e escolher a empresa
+  cy.get('mat-select[formcontrolname="empresa"]').click();
+  cy.get('#cdk-overlay-0', { timeout: 10000 }).should('be.visible');
+  cy.get('#cdk-overlay-0 mat-option')
+    .contains(empresa) // ← SUBSTITUA pelo nome da empresa que você quer
+    .click();
+
   cy.get('button[type="submit"]').click();
-  
+
   // Verificar redirecionamento
   cy.location('pathname').should('not.include', '/login')
     .then(() => {
       cy.log('Login realizado com sucesso!');
     });
-  
+
   cy.wait(500);
-  
+
 });
 
 Cypress.Commands.add('limparCache', (options = {}) => {
@@ -68,7 +68,7 @@ Cypress.Commands.add('limparCache', (options = {}) => {
 
   cy.clearCookies({ log });
   cy.clearLocalStorage({ log });
-  
+
   if (tempoEspera > 0) {
     cy.wait(tempoEspera, { log });
   }
@@ -76,7 +76,7 @@ Cypress.Commands.add('limparCache', (options = {}) => {
 
 Cypress.Commands.add('buscarComp', (nomeCliente) => {
   cy.log('#exampleModalLabel')
-  
+
   // Captura o título do modal antes da busca
   cy.get('#exampleModalLabel').then(($modalTitle) => {
     const modalTitle = $modalTitle.text().trim()
@@ -84,11 +84,11 @@ Cypress.Commands.add('buscarComp', (nomeCliente) => {
   })
 
   cy.get('#input-pesquisar')
-  .should('be.visible')
-  .click().type(nomeCliente).wait(1000)
+    .should('be.visible')
+    .click().type(nomeCliente).wait(1000)
   cy.log('ABERTO O MODAL')
   cy.get('#button-search').should('be.visible').click()
-  
+
   // Primeiro verifica se a tabela está visível
   cy.get('table.acs-table').should('be.visible')
 

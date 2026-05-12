@@ -55,28 +55,10 @@ set "PATH=%PATH%;C:\Program Files\nodejs\;C:\Program Files\Git\bin"
 if exist ".git" (
     echo.
     echo [INFO] Projeto Git detectado.
-    echo [INFO] Verificando atualizacoes...
-
-    git fetch origin
-
-    git status -uno | findstr /I "behind"
-
-    if !errorlevel! equ 0 (
-        echo.
-        echo [INFO] Atualizando projeto...
-
-        git pull origin main
-
-        if !errorlevel! neq 0 (
-            echo [ERRO] Falha ao atualizar o projeto.
-            pause
-        ) else (
-            echo [OK] Projeto atualizado com sucesso.
-        )
-    ) else (
-        echo [OK] Projeto ja esta atualizado.
-    )
-
+) else if exist "cypress-acs\.git" (
+    echo.
+    echo [INFO] Pasta do projeto detectada. Entrando nela...
+    cd cypress-acs
 ) else (
     echo.
     echo [AVISO] Projeto nao encontrado nesta pasta.
@@ -98,7 +80,6 @@ if exist ".git" (
         )
 
         cd cypress-acs
-
         echo [OK] Projeto clonado com sucesso.
 
     ) else (
@@ -107,6 +88,29 @@ if exist ".git" (
         exit /b
     )
 )
+
+:: Uma vez dentro da pasta, verifica atualizacoes
+if exist ".git" (
+    echo [INFO] Verificando atualizacoes no servidor...
+    git fetch origin
+    git status -uno | findstr /I "behind" >nul
+
+    if !errorlevel! equ 0 (
+        echo.
+        echo [INFO] Atualizando projeto...
+        git pull origin main
+
+        if !errorlevel! neq 0 (
+            echo [ERRO] Falha ao atualizar o projeto.
+            pause
+        ) else (
+            echo [OK] Projeto atualizado com sucesso.
+        )
+    ) else (
+        echo [OK] Projeto ja esta atualizado.
+    )
+)
+
 
 :: ===================================================
 :: 4. CONFIGURAR .ENV
